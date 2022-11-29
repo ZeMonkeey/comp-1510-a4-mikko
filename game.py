@@ -4,52 +4,126 @@ A01331396
 """
 
 
+import time
+
+
 def make_board(rows, columns):
     board = {}
     for row in range(rows):
         for column in range(columns):
-            board[row, column] = "empty"
-    board[2, 2] = "player"
-    board[4, 4] = "Brock"
+            board[row, column] = "|   |"
+    board[2, 2] = "| x |"
+    board[4, 4] = "|Gym|"
     pokeballs = [(4, 0), (0, 2), (4, 2)]
     grass_patch = [(0, 0), (0, 1), (1, 0), (1, 1)]
     water = [(0, 4), (1, 4)]
     for coordinate in board.keys():
         if coordinate in grass_patch:
-            board[coordinate] = "grass"
+            board[coordinate] = "|, ,|"
         if coordinate in pokeballs:
-            board[coordinate] = "pokeball"
+            board[coordinate] = "| o |"
         if coordinate in water:
-            board[coordinate] = "water"
+            board[coordinate] = "|~ ~|"
     return board
 
+
+def display_board(board):
+    for coordinate, value in board.items():
+        if coordinate[1] == 0:
+            print(value, end="")
+    print("")
+    for coordinate, value in board.items():
+        if coordinate[1] == 1:
+            print(value, end="")
+    print("")
+    for coordinate, value in board.items():
+        if coordinate[1] == 2:
+            print(value, end="")
+    print("")
+    for coordinate, value in board.items():
+        if coordinate[1] == 3:
+            print(value, end="")
+    print("")
+    for coordinate, value in board.items():
+        if coordinate[1] == 4:
+            print(value, end="")
+    print("")
+
+
+def welcome_user():
+    print("Hi there new trainer. My name is Professor Oak.")
+    time.sleep(1)
+    return input("What is your name?: ")
+
+
+def make_trainer(name):
+    starters = ["Charmander", "Bulbasaur", "Squirtle"]
+    choices = ["1", "2", "3"]
+    choice = None
+    print(f"Welcome to my lab, {name}. I see that you've come for your starter Pokemon.")
+    time.sleep(2.5)
+    print("You may pick any of these three Pokemons.")
+    time.sleep(1)
+    for sequence_number, pokemon in enumerate(starters, 1):
+        print(f"{sequence_number}: {pokemon}")
+    while True:
+        while choice not in choices:
+            choice = input("Pick a starter Pokemon (1-3): ")
+        pokemon_choice = starters[int(choice) - 1]
+        print(f"Are you sure you want {pokemon_choice}?")
+        confirm = input("y / n: ")
+        if confirm.lower() == "y":
+            break
+        choice = None
+    time.sleep(1)
+    print(f"Congratulations! You have chosen {pokemon_choice}.")
+    time.sleep(1)
+    print("You may now start your journey on become the Pokemon champion!")
+    time.sleep(3)
+    trainer_info = {"name": name, "pokemons": [pokemon_choice]}
+    return trainer_info
+
+
+def get_user_choice():
+    directions = ("Up", "Down", "Left", "Right")
+    for sequence_number, direction in enumerate(directions, 1):
+        print(f"{sequence_number}: {direction}")
+    return input("Enter a number to move (1-4): ")
+
+
+def validate_move(board, direction):
+    player_position = [coordinate for coordinate, value in board.items() if value == "| x |"][0]
+
+print(validate_move(make_board(5, 5), 1))
 
 def game():  # called from main
     rows = 5
     columns = 5
     board = make_board(rows, columns)
-    character = make_trainer("Player name")
+    name = welcome_user()
+    trainer = make_trainer(name)
     beat_gym = False
     while not beat_gym:
         # Tell the user where they are
-        current_location(board, character)
+        display_board(board)
+        time.sleep(3)
         direction = get_user_choice()
-        valid_move = validate_move(board, character, direction)
+        valid_move = validate_move(board, direction)
         if valid_move:
-            move_character(character)
-            describe_current_location(board, character)
+            move_trainer(trainer)
+            display_board(board)
             there_is_a_challenge = check_for_challenges()
             if there_is_a_challenge:
-                execute_challenge_protocol(character)
-                if character_has_leveled():
+                execute_challenge_protocol(trainer)
+                if trainer_has_leveled():
                     execute_glow_up_protocol()
-            achieved_goal = check_if_goal_attained(board, character)
+            achieved_goal = check_if_goal_attained(board, trainer)
         else:
             pass
 
 
-def main():
-    pass
+# def main():
+#     game()
 
 
 if __name__ == '__main__':
