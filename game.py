@@ -78,7 +78,7 @@ def make_trainer(name):
     time.sleep(1)
     print(f"Congratulations! You have chosen {pokemon_choice}.")
     time.sleep(1)
-    print("You may now start your journey on become the Pokemon champion!")
+    print("You may now start your journey on becoming the Pokemon champion!")
     time.sleep(3)
     trainer_info = {"name": name, "pokemons": [pokemon_choice]}
     return trainer_info
@@ -86,9 +86,13 @@ def make_trainer(name):
 
 def get_user_choice():
     directions = ("Up", "Down", "Left", "Right")
+    choices = ["1", "2", "3", "4"]
+    choice = None
     for sequence_number, direction in enumerate(directions, 1):
         print(f"{sequence_number}: {direction}")
-    return input("Enter a number to move (1-4): ")
+    while choice not in choices:
+        choice = input("Enter a number to move (1-4): ")
+    return choice
 
 
 def validate_move(board, direction):
@@ -122,8 +126,8 @@ def game():  # called from main
             pass
 
 
-# def main():
-#     game()
+def main():
+    game()
 
 
 if __name__ == '__main__':
