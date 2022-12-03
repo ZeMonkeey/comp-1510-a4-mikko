@@ -79,7 +79,7 @@ def make_trainer(name: str) -> dict:
     time.sleep(1)
     print("You may now start your journey on becoming the Pokemon champion!")
     time.sleep(1)
-    trainer_info = {"name": name, "trainer_position": (2, 2), "pokemons": [pokemon_choice]}
+    trainer_info = {"name": name, "pokemons": [pokemon_choice]}
     return trainer_info
 
 
@@ -94,9 +94,8 @@ def get_user_choice() -> str:
     return choice
 
 
-def validate_move(board: dict, trainer: dict, direction: str) -> bool:
-    trainer_position = trainer["trainer_position"]
-    print(trainer_position)
+def validate_move(board: dict, direction: str) -> bool:
+    trainer_position = [coordinate for coordinate, value in board.items() if "x" in value][0]
     surrounding_spaces = {(trainer_position[0] - 1, trainer_position[1]): "3",
                           (trainer_position[0] + 1, trainer_position[1]): "4",
                           (trainer_position[0], trainer_position[1] - 1): "1",
@@ -114,14 +113,22 @@ def validate_move(board: dict, trainer: dict, direction: str) -> bool:
 
 
 def move_trainer(board, direction):
+    trainer_position = [coordinate for coordinate, value in board.items() if "x" in value][0]
+    board[trainer_position] = board[trainer_position].replace("x", " ")
+    space_to_move_into = None
     if direction == "1":
-        pass
+        space_to_move_into = (trainer_position[0], trainer_position[1] - 1)
     elif direction == "2":
-        pass
-    elif direction == "2":
-        pass
-    elif direction == "2":
-        pass
+        space_to_move_into = (trainer_position[0], trainer_position[1] + 1)
+    elif direction == "3":
+        space_to_move_into = (trainer_position[0] - 1, trainer_position[1])
+    elif direction == "4":
+        space_to_move_into = (trainer_position[0] + 1, trainer_position[1])
+    display_of_space = list(board[space_to_move_into])
+    display_of_space[2] = "x"
+    display_of_space = "".join(display_of_space)
+    board[space_to_move_into] = display_of_space
+    return board
 
 
 def game():  # called from main
@@ -136,7 +143,7 @@ def game():  # called from main
         display_board(board)
         time.sleep(1)
         direction = get_user_choice()
-        valid_move = validate_move(board, trainer, direction)
+        valid_move = validate_move(board, direction)
         if valid_move:
             move_trainer(board, direction)
             display_board(board)
