@@ -7,7 +7,7 @@ A01331396
 import time
 
 
-def make_board(rows, columns):
+def make_board(rows: int, columns: int) -> dict:
     board = {}
     for row in range(rows):
         for column in range(columns):
@@ -24,11 +24,10 @@ def make_board(rows, columns):
             board[coordinate] = "| o |"
         if coordinate in water:
             board[coordinate] = "|~ ~|"
-    board[0, 0] = "|,x,|"
     return board
 
 
-def display_board(board):
+def display_board(board: dict):
     for coordinate, value in board.items():
         if coordinate[1] == 0:
             print(value, end="")
@@ -49,7 +48,7 @@ def display_board(board):
         if coordinate[1] == 4:
             print(value, end="")
     print("")
-display_board(make_board(5, 5))
+
 
 def welcome_user():
     print("Hi there new trainer. My name is Professor Oak.")
@@ -57,7 +56,7 @@ def welcome_user():
     return input("What is your name?: ")
 
 
-def make_trainer(name):
+def make_trainer(name: str) -> dict:
     starters = ["Charmander", "Bulbasaur", "Squirtle"]
     choices = ["1", "2", "3"]
     choice = None
@@ -80,11 +79,11 @@ def make_trainer(name):
     time.sleep(1)
     print("You may now start your journey on becoming the Pokemon champion!")
     time.sleep(1)
-    trainer_info = {"name": name, "pokemons": [pokemon_choice]}
+    trainer_info = {"name": name, "trainer_position": (2, 2), "pokemons": [pokemon_choice]}
     return trainer_info
 
 
-def get_user_choice():
+def get_user_choice() -> str:
     directions = ("Up", "Down", "Left", "Right")
     choices = ["1", "2", "3", "4"]
     choice = None
@@ -95,12 +94,13 @@ def get_user_choice():
     return choice
 
 
-def validate_move(board, direction):
-    player_position = [coordinate for coordinate, value in board.items() if "x" in value][0]
-    surrounding_spaces = {(player_position[0] - 1, player_position[1]): "3",
-                          (player_position[0] + 1, player_position[1]): "4",
-                          (player_position[0], player_position[1] - 1): "1",
-                          (player_position[0], player_position[1] + 1): "2"}
+def validate_move(board: dict, trainer: dict, direction: str) -> bool:
+    trainer_position = trainer["trainer_position"]
+    print(trainer_position)
+    surrounding_spaces = {(trainer_position[0] - 1, trainer_position[1]): "3",
+                          (trainer_position[0] + 1, trainer_position[1]): "4",
+                          (trainer_position[0], trainer_position[1] - 1): "1",
+                          (trainer_position[0], trainer_position[1] + 1): "2"}
     valid_choices = []
     for coordinate, value in surrounding_spaces.items():
         if coordinate in board.keys():
@@ -114,7 +114,14 @@ def validate_move(board, direction):
 
 
 def move_trainer(board, direction):
-    pass
+    if direction == "1":
+        pass
+    elif direction == "2":
+        pass
+    elif direction == "2":
+        pass
+    elif direction == "2":
+        pass
 
 
 def game():  # called from main
@@ -129,7 +136,7 @@ def game():  # called from main
         display_board(board)
         time.sleep(1)
         direction = get_user_choice()
-        valid_move = validate_move(board, direction)
+        valid_move = validate_move(board, trainer, direction)
         if valid_move:
             move_trainer(board, direction)
             display_board(board)
