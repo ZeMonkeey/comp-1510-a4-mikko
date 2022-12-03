@@ -14,14 +14,16 @@ def make_board(rows: int, columns: int) -> dict:
             board[row, column] = "|   |"
     board[2, 2] = "| x |"
     board[4, 4] = "|Gym|"
-    pokeballs = [(4, 0), (0, 2), (4, 2)]
+    board[4, 1] = "| S |"
+    board[4, 2] = "| H |"
+    pokeballs = [(4, 0), (0, 2)]
     grass_patch = [(0, 0), (0, 1), (1, 0), (1, 1)]
     water = [(0, 4), (1, 4)]
     for coordinate in board.keys():
         if coordinate in grass_patch:
             board[coordinate] = "|, ,|"
         if coordinate in pokeballs:
-            board[coordinate] = "| o |"
+            board[coordinate] = "| p |"
         if coordinate in water:
             board[coordinate] = "|~ ~|"
     return board
@@ -106,10 +108,7 @@ def validate_move(board: dict, direction: str) -> bool:
             valid_choices.append(value)
     if direction in valid_choices:
         return True
-    else:
-        print("Not a valid move! Pick again.")
-        time.sleep(1)
-        return False
+    return False
 
 
 def move_trainer(board, direction):
@@ -131,6 +130,10 @@ def move_trainer(board, direction):
     return board
 
 
+def check_for_events(board):
+    pass
+
+
 def game():  # called from main
     rows = 5
     columns = 5
@@ -147,14 +150,20 @@ def game():  # called from main
         if valid_move:
             move_trainer(board, direction)
             display_board(board)
-            there_is_a_challenge = check_for_challenges()
-            if there_is_a_challenge:
+            event_type = check_for_events(board)
+            if event_type == "grass":
                 execute_challenge_protocol(trainer)
-                if trainer_has_leveled():
-                    execute_glow_up_protocol()
-            achieved_goal = check_if_goal_attained(board, trainer)
+            elif event_type == "water":
+                pass
+            elif event_type == "pokeball":
+                pass
+
+                # if trainer_has_leveled():
+                #     execute_glow_up_protocol()
+            # achieved_goal = check_if_goal_attained(board, trainer)
         else:
-            pass
+            print("Not a valid move! Pick again.")
+            time.sleep(1)
 
 
 def main():
