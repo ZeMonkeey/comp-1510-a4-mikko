@@ -15,7 +15,6 @@ def make_board(rows: int, columns: int) -> dict:
             board[row, column] = "|   |"
     board[2, 2] = "| x |"
     board[4, 4] = "|Gym|"
-    board[4, 2] = "| H |"
     pokeballs = [(4, 0), (0, 2)]
     grass_patch = [(0, 0), (0, 1), (1, 0), (1, 1)]
     water = [(0, 4), (1, 4)]
@@ -107,8 +106,6 @@ def get_user_choice(trainer, board) -> tuple:
 def validate_move(board: dict, direction: tuple) -> bool or str:
     if direction == board[(4, 0)] or direction == board[(0, 2)]:
         return "pokeball"
-    elif direction == board[(4, 2)]:
-        return "heal"
     elif direction == board[(4, 4)]:
         return "gym"
 
@@ -145,10 +142,6 @@ def get_pokeball(trainer):
     return trainer
 
 
-def heal_pokemon(trainer):
-    pass
-
-
 def fight_gym(trainer):
     pass
 
@@ -158,6 +151,22 @@ def check_for_events(board):
 
 
 def game():  # called from main
+    moves = {"Tackle": 5,
+             "Scratch": 5,
+             "Ember": 5,
+             "Flamethrower": 12,
+             "Water Gun": 5,
+             "Bite": 7,
+             "Vine Whip": 5,
+             "Razor Leaf": 6,
+             "Solar Beam": 14}
+    pokemons = {"Charmander": {"HP": 39, "moves": {"Tackle": 5, "Ember": 5}},
+                "Squirtle": {"HP": 44, "moves": {"Tackle": 5, "Water Gun": 5}},
+                "Bulbasaur": {"HP": 45, "moves": {"Tackle": 5, "Vine Whip": 5}},
+                "Charmeleon": {"HP": 58, "moves": {"Tackle": 5, "Ember": 5, "Flamethrower": 12}},
+                "Wartortle": {"HP": 59, "moves": {"Tackle": 5, "Water Gun": 5, "Bite": 7}},
+                "Ivysaur": {"HP": 60, "moves": {"Tackle": 5, "Vine Whip": 5, "Razor Leaf": 6}},
+                }
     rows = 5
     columns = 5
     board = make_board(rows, columns)
@@ -172,8 +181,6 @@ def game():  # called from main
         valid_move = validate_move(board, direction)
         if valid_move == "pokeball":
             get_pokeball(trainer)
-        elif valid_move == "heal":
-            heal_pokemon(trainer)
         elif valid_move == "gym":
             fight_gym(trainer)
         elif valid_move:
