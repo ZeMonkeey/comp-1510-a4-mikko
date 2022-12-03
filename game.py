@@ -57,7 +57,7 @@ def welcome_user():
     return input("What is your name?: ")
 
 
-def make_trainer(name: str) -> dict:
+def make_trainer(name: str, pokemons: dict) -> dict:
     starters = ["Charmander", "Bulbasaur", "Squirtle"]
     choices = ["1", "2", "3"]
     choice = None
@@ -80,7 +80,8 @@ def make_trainer(name: str) -> dict:
     time.sleep(1)
     print("You may now start your journey on becoming the Pokemon champion!")
     time.sleep(1)
-    trainer_info = {"name": name, "pokemons": [pokemon_choice], "inventory": {"pokeball": 5, "potion": 5, "revive": 0}}
+    trainer_info = {"name": name, "pokemons": [pokemons[pokemon_choice]],
+                    "inventory": {"pokeball": 5, "potion": 5, "revive": 0}}
     return trainer_info
 
 
@@ -147,6 +148,26 @@ def fight_gym(trainer):
 
 
 def check_for_events(board):
+    trainer_position = [coordinate for coordinate, value in board.items() if "x" in value][0]
+    if "," in board[trainer_position]:
+        return "grass"
+    elif "~" in board[trainer_position]:
+        return "water"
+
+
+def get_grass_pokemon(trainer: dict) -> str:
+    trainer_levels = [pokemon["level"] for pokemon in trainer["pokemons"]]
+
+    for level in trainer_levels:
+        if level < 7:
+            pokemons = ["Charmander", "Bulbasaur"]
+            return pokemons[random.randint(0, 1)]
+        else:
+            pokemons = ["Charmander", "Bulbasaur", "Charmeleon", "Charmeleon", "Ivysaur", "Ivysaur"]
+            return pokemons[random.randint(0, 5)]
+
+
+def get_water_pokemon(trainer: dict) -> str:
     pass
 
 
@@ -160,23 +181,23 @@ def game():  # called from main
              "Vine Whip": 5,
              "Razor Leaf": 6,
              "Solar Beam": 14}
-    pokemons = {"Charmander": {"HP": 39, "moves": {"Tackle": 5, "Ember": 5}},
-                "Squirtle": {"HP": 44, "moves": {"Tackle": 5, "Water Gun": 5}},
-                "Bulbasaur": {"HP": 45, "moves": {"Tackle": 5, "Vine Whip": 5}},
-                "Charmeleon": {"HP": 58, "moves": {"Tackle": 5, "Ember": 5, "Flamethrower": 12}},
-                "Wartortle": {"HP": 59, "moves": {"Tackle": 5, "Water Gun": 5, "Bite": 7}},
-                "Ivysaur": {"HP": 60, "moves": {"Tackle": 5, "Vine Whip": 5, "Razor Leaf": 6}},
+    pokemons = {"Charmander": {"HP": 39, "level": 5, "moves": {"Tackle": 5, "Ember": 5}},
+                "Squirtle": {"HP": 44, "level": 5, "moves": {"Tackle": 5, "Water Gun": 5}},
+                "Bulbasaur": {"HP": 45, "level": 5, "moves": {"Tackle": 5, "Vine Whip": 5}},
+                "Charmeleon": {"HP": 58, "level": 7, "moves": {"Tackle": 5, "Ember": 5, "Flamethrower": 12}},
+                "Wartortle": {"HP": 59, "level": 7, "moves": {"Tackle": 5, "Water Gun": 5, "Bite": 7}},
+                "Ivysaur": {"HP": 60, "level": 7, "moves": {"Tackle": 5, "Vine Whip": 5, "Razor Leaf": 6}},
                 }
     rows = 5
     columns = 5
     board = make_board(rows, columns)
     # name = welcome_user()
-    trainer = make_trainer("Mikko")
+    trainer = make_trainer("Mikko", pokemons)
     beat_gym = False
+    # Tell the user where they are
+    display_board(board)
+    time.sleep(1)
     while not beat_gym:
-        # Tell the user where they are
-        display_board(board)
-        time.sleep(1)
         direction = get_user_choice(trainer, board)
         valid_move = validate_move(board, direction)
         if valid_move == "pokeball":
@@ -188,10 +209,11 @@ def game():  # called from main
             display_board(board)
             event_type = check_for_events(board)
             if event_type == "grass":
-                execute_challenge_protocol(trainer)
+                wild_pokemon = get_grass_pokemon(trainer)
+                initiate_pokemon_battle()
             elif event_type == "water":
-                pass
-
+                wild_pokemon = get_water_pokemon(trainer)
+                initiate_pokemon_battle()
                 # if trainer_has_leveled():
                 #     execute_glow_up_protocol()
             # achieved_goal = check_if_goal_attained(board, trainer)
