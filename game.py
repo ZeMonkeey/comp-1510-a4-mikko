@@ -24,6 +24,7 @@ def make_board(rows, columns):
             board[coordinate] = "| o |"
         if coordinate in water:
             board[coordinate] = "|~ ~|"
+    board[0, 0] = "|,x,|"
     return board
 
 
@@ -48,7 +49,7 @@ def display_board(board):
         if coordinate[1] == 4:
             print(value, end="")
     print("")
-
+display_board(make_board(5, 5))
 
 def welcome_user():
     print("Hi there new trainer. My name is Professor Oak.")
@@ -61,7 +62,7 @@ def make_trainer(name):
     choices = ["1", "2", "3"]
     choice = None
     print(f"Welcome to my lab, {name}. I see that you've come for your starter Pokemon.")
-    time.sleep(2.5)
+    time.sleep(1)
     print("You may pick any of these three Pokemons.")
     time.sleep(1)
     for sequence_number, pokemon in enumerate(starters, 1):
@@ -75,11 +76,10 @@ def make_trainer(name):
         if confirm.lower() == "y":
             break
         choice = None
-    time.sleep(1)
     print(f"Congratulations! You have chosen {pokemon_choice}.")
     time.sleep(1)
     print("You may now start your journey on becoming the Pokemon champion!")
-    time.sleep(3)
+    time.sleep(1)
     trainer_info = {"name": name, "pokemons": [pokemon_choice]}
     return trainer_info
 
@@ -96,25 +96,42 @@ def get_user_choice():
 
 
 def validate_move(board, direction):
-    player_position = [coordinate for coordinate, value in board.items() if value == "| x |"][0]
+    player_position = [coordinate for coordinate, value in board.items() if "x" in value][0]
+    surrounding_spaces = {(player_position[0] - 1, player_position[1]): "3",
+                          (player_position[0] + 1, player_position[1]): "4",
+                          (player_position[0], player_position[1] - 1): "1",
+                          (player_position[0], player_position[1] + 1): "2"}
+    valid_choices = []
+    for coordinate, value in surrounding_spaces.items():
+        if coordinate in board.keys():
+            valid_choices.append(value)
+    if direction in valid_choices:
+        return True
+    else:
+        print("Not a valid move! Pick again.")
+        time.sleep(1)
+        return False
 
-print(validate_move(make_board(5, 5), 1))
+
+def move_trainer(board, direction):
+    pass
+
 
 def game():  # called from main
     rows = 5
     columns = 5
     board = make_board(rows, columns)
-    name = welcome_user()
-    trainer = make_trainer(name)
+    # name = welcome_user()
+    trainer = make_trainer("Mikko")
     beat_gym = False
     while not beat_gym:
         # Tell the user where they are
         display_board(board)
-        time.sleep(3)
+        time.sleep(1)
         direction = get_user_choice()
         valid_move = validate_move(board, direction)
         if valid_move:
-            move_trainer(trainer)
+            move_trainer(board, direction)
             display_board(board)
             there_is_a_challenge = check_for_challenges()
             if there_is_a_challenge:
