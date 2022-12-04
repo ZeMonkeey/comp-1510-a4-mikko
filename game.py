@@ -10,6 +10,15 @@ import pokemon_class
 
 
 def make_board(rows: int, columns: int) -> dict:
+    """
+    Make a board based on rows and columns given.
+
+    :param rows: an integer
+    :param columns: an integer
+    :precondition: params must be integers greater than 0
+    :postcondition: make a board according to rows and columns given. Then, populates a 5x5 area with events.
+    :return: a board as a dictionary
+    """
     board = {}
     for row in range(rows):
         for column in range(columns):
@@ -27,6 +36,13 @@ def make_board(rows: int, columns: int) -> dict:
 
 
 def display_board(board: dict):
+    """
+    Display a board that is made from the make_board function.
+
+    :param board: a dictionary
+    :precondition: board must be made with the make_board function.
+    :postcondition: display all spaces
+    """
     for coordinate, value in board.items():
         if coordinate[1] == 0:
             print(value, end="")
@@ -50,12 +66,25 @@ def display_board(board: dict):
 
 
 def welcome_user() -> str:
+    """
+    Print opening dialogue.
+
+    :return: name of user as a string
+    """
     print("Hi there new trainer. My name is Professor Oak.")
     time.sleep(1)
     return input("What is your name?: ")
 
 
 def make_starter(pokemon_choice: str) -> pokemon_class.Pokemon:
+    """
+    Make the player's Pokemon using the Pokemon class.
+
+    :param pokemon_choice: a string
+    :precondition: pokemon_choice must be either Charmander, Bulbasaur, or Squirtle.
+    :postcondition: make a Pokemon object according to pokemon_choice given.
+    :return: a Pokemon object
+    """
     if pokemon_choice == "Charmander":
         return pokemon_class.Pokemon(pokemon_choice, "Fire", 5, ["Tackle", "Ember"])
     elif pokemon_choice == "Bulbasaur":
@@ -65,6 +94,14 @@ def make_starter(pokemon_choice: str) -> pokemon_class.Pokemon:
 
 
 def make_trainer(name: str) -> dict:
+    """
+    Make the player's character.
+
+    :param name: a string.
+    :precondition: name must be a string.
+    :postcondition: ask user for information to be used in the making of his character.
+    :return: player's character as a dictionary.
+    """
     starters = ["Charmander", "Squirtle", "Bulbasaur"]
     choices = ["1", "2", "3"]
     choice = None
@@ -116,6 +153,14 @@ def make_trainer(name: str) -> dict:
 
 
 def get_user_choice(board: dict) -> tuple or str:
+    """
+    Ask the user for their choice.
+
+    :param board: a dictionary
+    :precondition: board must be made using the make_board function.
+    :postcondition: ask the user for direction or if they want to quit.
+    :return: a tuple for direction or a string of "quit" to leave game.
+    """
     trainer_position = [coordinate for coordinate, value in board.items() if "x" in value][0]
     directions = ("Up", "Down", "Left", "Right", "quit")
     choices = ["1", "2", "3", "4", "5"]
@@ -139,6 +184,15 @@ def get_user_choice(board: dict) -> tuple or str:
 
 
 def validate_move(board: dict, direction: tuple) -> bool or str:
+    """
+    Check if user movement is valid.
+
+    :param board: a dictionary.
+    :param direction: a tuple.
+    :precondition: board must be made using the make_board function.
+    :postcondition: check if the direction given is within the board's boundary.
+    :return: True if direction is valid.
+    """
     if direction == (4, 4):
         return "gym"
 
@@ -154,6 +208,15 @@ def validate_move(board: dict, direction: tuple) -> bool or str:
 
 
 def move_trainer(board: dict, direction: tuple) -> dict:
+    """
+    Move player position on the board.
+
+    :param board: a dictionary.
+    :param direction: a tuple.
+    :precondition: board must be made using the make_board function.
+    :precondition: direction given must be within the board's boundary.
+    :return: a board with the player's position modified. board is a dictionary.
+    """
     trainer_position = [coordinate for coordinate, value in board.items() if "x" in value][0]
     board[trainer_position] = board[trainer_position].replace("x", " ")
     display_of_space = list(board[direction])
@@ -164,6 +227,14 @@ def move_trainer(board: dict, direction: tuple) -> dict:
 
 
 def fight_gym(trainer: dict) -> bool:
+    """
+    Initiate battle for gym fight.
+
+    :param trainer: a dictionary.
+    :precondition: trainer must be made using the make_trainer function.
+    :poscondition: ask the player if they want to fight. initiate gym fight if they do.
+    :return: True if player beats the gym.
+    """
     lose = None
     onix = pokemon_class.Pokemon("Onix", "Rock", 10, ["Tackle", "Rock Throw"], 90)
     steelix = pokemon_class.Pokemon("Steelix", "Steel", 10, ["Iron Tail", "Rock Throw", "Dragon Breath",
@@ -205,6 +276,14 @@ def fight_gym(trainer: dict) -> bool:
 
 
 def check_for_events(board: dict) -> str:
+    """
+    Check for wild Pokemon encounter.
+
+    :param board: a dictionary
+    :precondition: board must be made using the make_board function.
+    :postcondition: check the space that the user moved into.
+    :return: a string of either "grass" or "water"
+    """
     trainer_position = [coordinate for coordinate, value in board.items() if "x" in value][0]
     if "," in board[trainer_position]:
         return "grass"
@@ -213,6 +292,14 @@ def check_for_events(board: dict) -> str:
 
 
 def get_grass_pokemon(trainer: dict) -> object:
+    """
+    Generate random grass Pokemon.
+
+    :param trainer: a dictionary.
+    :precondition: trainer must be made using the make_trainer function.
+    :postcondition: based on player's Pokemon level, a wild grass Pokemon will be made.
+    :return: a Pokemon object.
+    """
     level = random.randint(trainer["pokemon"].level - 3, trainer["pokemon"].level + 1)
     charmander = pokemon_class.Pokemon("Charmander", "Fire", level, ["Tackle", "Ember"])
     bulbasaur = pokemon_class.Pokemon("Bulbasaur", "Grass", level, ["Tackle", "Vine Whip"])
@@ -228,6 +315,14 @@ def get_grass_pokemon(trainer: dict) -> object:
 
 
 def get_water_pokemon(trainer: dict) -> object:
+    """
+    Generate random water Pokemon.
+
+    :param trainer: a dictionary
+    :precondition: trainer must be made using the make_trainer function.
+    :postcondition: based on player's Pokemon level, a wild water Pokemon will be made.
+    :return: a Pokemon object.
+    """
     level = random.randint(trainer["pokemon"].level - 3, trainer["pokemon"].level + 1)
     squirtle = pokemon_class.Pokemon("Squirtle", "Water", level, ["Tackle", "Water Gun"])
     wartortle = pokemon_class.Pokemon("Wartortle", "Water", level, ["Tackle", "Water Gun", "Bite"])
@@ -240,6 +335,13 @@ def get_water_pokemon(trainer: dict) -> object:
 
 
 def check_if_goal_attained(trainer: dict):
+    """
+    Check if user has beaten the gym.
+
+    :param trainer: a dictionary.
+    :precondtion: trainer must be made using the make_trainer function.
+    :postconditon: check player's badges to see if they have the "Boulder Badge".
+    """
     if "Boulder Badge" in trainer["badges"]:
         print("")
         print("Congratulations! You have beat the game!")
@@ -247,6 +349,9 @@ def check_if_goal_attained(trainer: dict):
 
 
 def quit_game():
+    """
+    Ask the user if they want to quit game. Quit the program if they do.
+    """
     print("Are you sure you want to quit?")
     time.sleep(0.5)
     print("Your progress does not save.")
@@ -258,6 +363,9 @@ def quit_game():
 
 
 def game():  # called from main
+    """
+    Initiate the game.
+    """
     rows = 5
     columns = 5
     board = make_board(rows, columns)

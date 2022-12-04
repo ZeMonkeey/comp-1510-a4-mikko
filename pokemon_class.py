@@ -3,6 +3,16 @@ import time
 
 
 def check_advantage(move: str, opponent_type: str) -> str or None:
+    """
+    Check the move's advantage on the opposing Pokemon.
+
+    :param move: a string
+    :param opponent_type: a string
+    :precondition: move must be an existing move in the game.
+    :precondition: opponent_type must be an existing type in the game.
+    :postcondition: check the type advantage of the move based on the opponent's type.
+    :return: a string to indicate whether the move is effective or not.
+    """
     moves = {"Tackle": "Normal",
              "Dragon Breath": "Dragon",
              "Ember": "Fire",
@@ -42,6 +52,16 @@ def check_advantage(move: str, opponent_type: str) -> str or None:
 
 
 def flee_battle(pokemon_level: int, opponent_level: int) -> bool:
+    """
+    Generate random choice whether player can leave battle or not.
+
+    :param pokemon_level: an integer
+    :param opponent_level: an integer
+    :precondition: params must be integers.
+    :postcondition: based on the trainer's pokemon level and the opponent's level, function will generate a random
+    choice if player can flee from battle.
+    :return: True if they can leave battle.
+    """
     if pokemon_level > opponent_level:
         return random.choice((True, False, True, True, True))
     elif pokemon_level == opponent_level:
@@ -51,6 +71,9 @@ def flee_battle(pokemon_level: int, opponent_level: int) -> bool:
 
 
 class Pokemon:
+    """
+    Represent a Pokemon. At least I tried to.
+    """
     def __init__(self, name: str, element_type: str, level: int, moves: list, health=None):
         charmander = ["Charmander", "Charmeleon"]
         bulbasaur = ["Bulbasaur", "Ivysaur"]
@@ -72,6 +95,9 @@ class Pokemon:
         self.max_health = self.health
 
     def add_new_moves(self):
+        """
+        Add new moves to newly evolved Pokemon's moves attribute.
+        """
         moves = {"Charmeleon": "Dragon Breath",
                  "Charizard": "Flamethrower",
                  "Wartortle": "Bite",
@@ -83,6 +109,9 @@ class Pokemon:
         time.sleep(0.5)
 
     def evolve_pokemon(self, evolutions: list):
+        """
+        Evolve the pokemon to its next evolution. Will change the name attribute and call add_new_moves.
+        """
         poke_arts = {"Charmeleon": """⬜⬜⬜⬜⬜⬜⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬛🟥⬛⬜⬜⬜⬜⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬛🟥🟥⬛⬜⬜⬛🟥🟥⬛⬜⬜⬜⬜⬜⬜⬜
@@ -248,6 +277,10 @@ class Pokemon:
         self.add_new_moves()
 
     def level_up(self):
+        """
+        Calculate the Pokemon's experience points and if it's enough, level up the Pokemon. Will change the Pokemon's
+        level, max_health, and experience attributes. Also, check if the Pokemon can evolve.
+        """
         evolutions = ["Charmander", "Squirtle", "Bulbasaur",
                       "Charmeleon", "Wartortle", "Ivysaur",
                       "Charizard", "Blastoise", "Venusaur"]
@@ -269,6 +302,10 @@ class Pokemon:
             self.evolve_pokemon(evolutions)
 
     def gain_exp(self, opponent):
+        """
+        Calculate the experience to give to Pokemon. This is based off the Pokemon's level and the opposing Pokemon it
+        defeated.
+        """
         exp_gained = random.randint(70, 80)
         if self.level > opponent.level:
             exp_gained -= 5 * (self.level - opponent.level)
@@ -279,6 +316,9 @@ class Pokemon:
         self.level_up()
 
     def initiate_battle(self, opponent, trainer: dict, battle_type="wild") -> True or None:
+        """
+        Initiate the Pokemon battle!!
+        """
         escape = False
         move_powers = {"Tackle": 8,
                        "Dragon Breath": 10,
