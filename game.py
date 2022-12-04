@@ -156,7 +156,7 @@ def get_grass_pokemon(trainer: dict) -> object:
     level = random.randint(trainer["pokemon"].level - 3, trainer["pokemon"].level + 1)
     charmander = pokemon_class.Pokemon("Charmander", "Fire", level, ["Tackle", "Ember"])
     bulbasaur = pokemon_class.Pokemon("Bulbasaur", "Grass", level, ["Tackle", "Vine Whip"])
-    charmeleon = pokemon_class.Pokemon("Charmeleon", "Fire", level, ["Tackle", "Ember", "Scratch"])
+    charmeleon = pokemon_class.Pokemon("Charmeleon", "Fire", level, ["Tackle", "Ember", "Dragon Breath"])
     ivysaur = pokemon_class.Pokemon("Ivysaur", "Grass", level, ["Tackle", "Vine Whip", "Razor Leaf"])
 
     if trainer["pokemon"].level < 7:

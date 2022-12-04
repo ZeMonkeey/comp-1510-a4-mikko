@@ -4,7 +4,7 @@ import time
 
 def check_advantage(move, opponent_type):
     moves = {"Tackle": "Normal",
-             "Scratch": "Normal",
+             "Dragon Breath": "Dragon",
              "Ember": "Fire",
              "Flamethrower": "Fire",
              "Water Gun": "Water",
@@ -58,6 +58,17 @@ class Pokemon:
             self.health = round(8 * level, 0)
         self.max_health = self.health
 
+    def add_new_moves(self):
+        moves = {"Charmeleon": "Dragon Breath",
+                 "Charizard": "Flamethrower",
+                 "Wartortle": "Bite",
+                 "Blastoise": "Hydro Pump",
+                 "Ivysaur": "Razor Leaf",
+                 "Venasaur": "Solar Beam"}
+        self.moves.append(moves[self.name])
+        print(f"{self.name} has learned {moves[self.name]}!\n")
+        time.sleep(0.5)
+
     def evolve_pokemon(self, evolutions):
         index = evolutions.index(self.name)
         pre_evolution = self.name
@@ -70,8 +81,9 @@ class Pokemon:
         time.sleep(1)
         print(".")
         time.sleep(1.5)
-        print(f"{pre_evolution} has evolved into {self.name}!\n")
+        print(f"{pre_evolution} has evolved into {self.name}!")
         time.sleep(0.5)
+        self.add_new_moves()
 
     def level_up(self):
         evolutions = ["Charmander", "Squirtle", "Bulbasaur",
@@ -107,7 +119,7 @@ class Pokemon:
     def fight_wild_pokemon(self, opponent):
         escape = False
         move_powers = {"Tackle": 8,
-                       "Scratch": 8,
+                       "Dragon Breath": 10,
                        "Ember": 8,
                        "Flamethrower": 16,
                        "Water Gun": 8,
@@ -240,7 +252,7 @@ def main():
     squirtle = Pokemon("Squirtle", "Water", 5, ["Tackle", "Water Gun"])
     bulbasaur = Pokemon("Bulbasaur", "Grass", 5, ["Tackle", "Vine Whip"])
     charmander.fight_wild_pokemon(bulbasaur)
-    # charmander.fight_wild_pokemon(bulbasaur)
+    charmander.fight_wild_pokemon(bulbasaur)
     print(charmander.experience)
     print(charmander.level)
 
