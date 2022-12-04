@@ -15,3 +15,4 @@ ZeMonkeey
 
 ## Any important comments you'd like to make about your work:
 Most ascii art may not work on terminal/command prompt.
+Don't spam too many inputs.
