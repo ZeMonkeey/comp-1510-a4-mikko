@@ -187,7 +187,7 @@ def fight_gym(trainer):
         lose = trainer["pokemon"].initiate_battle(onix, trainer, "Brock")
         if not lose:
             print("Go Steelix!")
-            trainer["pokemon"].initiate_battle(steelix, trainer, "Brock")
+            lose = trainer["pokemon"].initiate_battle(steelix, trainer, "Brock")
             trainer["pokemon"].health = trainer["pokemon"].max_health
         if lose:
             print("Get gud kid!")

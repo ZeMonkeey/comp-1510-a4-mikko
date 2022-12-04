@@ -361,12 +361,14 @@ class Pokemon:
 
             # heal pokemon
             elif choice == "2":
-                if self.health < self.max_health:
+                if trainer["potions"] <= 0:
+                    print("You have 0 potions left.")
+                elif self.health < self.max_health:
                     self.health += 10
                     trainer["potions"] -= 1
                     print(f"You healed {self.name} for 10 hp.")
                     time.sleep(0.5)
-                    print(f"You have {trainer['potions']} left.\n")
+                    print(f"You have {trainer['potions']} potions left.\n")
                     if self.health > self.max_health:
                         self.health = self.max_health
                 elif self.health == self.max_health:
@@ -405,14 +407,12 @@ class Pokemon:
                 damage /= 2
             damage = round(damage, 2)
             self.health -= damage
-            print(f"It deals {damage} damage.")
+            print(f"It deals {damage} damage!")
 
             # check if you are dead
             if self.health <= 0:
                 print(f"\n{self.name} has fainted!")
-                lose = True
-                time.sleep(0.5)
-                return lose
+                return True
 
         if escape:
             print("You have successfully fled.")
