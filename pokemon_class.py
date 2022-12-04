@@ -120,13 +120,21 @@ class Pokemon:
         print(f"You send out {self.name}!")
 
         # battle starts
+        print("")
+        print("----- Wild Pokemon Encounter -----")
         while self.health > 0 and opponent.health > 0 and not escape:
             # pokemon information
             self.health = round(self.health, 2)
             opponent.health = round(opponent.health, 2)
             time.sleep(0.5)
-            print(f"\n{self.name}   HP {self.health} / {self.max_health}")
-            print(f"{opponent.name}   HP {opponent.health} / {opponent.max_health}")
+            print("")
+            print("----------------------------------")
+            print(f"{self.name}    Lv.{self.level}\n    |HP {self.health} / {self.max_health}|")
+            print("----------------------------------")
+            print("")
+            print("----------------------------------")
+            print(f"{opponent.name}    Lv.{opponent.level}\n    |HP {opponent.health} / {opponent.max_health}|")
+            print("----------------------------------")
             time.sleep(0.5)
             print("")
             choices = ("Fight", "Heal", "Flee")
