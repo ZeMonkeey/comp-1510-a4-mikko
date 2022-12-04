@@ -11,23 +11,32 @@ def check_advantage(move, opponent_type):
              "Bite": "Dark",
              "Vine Whip": "Grass",
              "Razor Leaf": "Grass",
-             "Solar Beam": "Grass"}
+             "Solar Beam": "Grass",
+             "Rock Throw": "Rock",
+             "Earthquake": "Rock",
+             "Iron Tail": "Steel"}
+    effective = {"Fire": ["Steel", "Grass"],
+                 "Water": ["Fire", "Rock"],
+                 "Grass": ["Water", "Rock"],
+                 "Rock": ["Fire"]
+                 }
+    not_effective = {"Fire": ["Water", "Fire", "Rock"],
+                     "Water": ["Water", "Grass"],
+                     "Grass": ["Grass", "Fire", "Steel"],
+                     "Steel": ["Fire", "Water"],
+                     "Dragon": ["Steel"],
+                     "Dark": ["Steel"]
+                     }
     move_type = moves[move]
-    if move_type == opponent_type:
-        return "It's not very effective."
+    try:
+        effective_against = effective[move_type]
+        not_effective_against = not_effective[move_type]
+    except KeyError:
+        return None
 
-    elif move_type == "Fire" and opponent_type == "Grass":
+    if opponent_type in effective_against:
         return "It's super effective!"
-    elif move_type == "Water" and opponent_type == "Fire":
-        return "It's super effective!"
-    elif move_type == "Grass" and opponent_type == "Water":
-        return "It's super effective!"
-
-    elif move_type == "Grass" and opponent_type == "Fire":
-        return "It's not very effective."
-    elif move_type == "Fire" and opponent_type == "Water":
-        return "It's not very effective."
-    elif move_type == "Water" and opponent_type == "Grass":
+    elif opponent_type in not_effective_against:
         return "It's not very effective."
 
 
@@ -41,7 +50,7 @@ def flee_battle(pokemon_level, opponent_level):
 
 
 class Pokemon:
-    def __init__(self, name: str, element_type: str, level: int, moves: list):
+    def __init__(self, name: str, element_type: str, level: int, moves: list, health=None):
         charmander = ["Charmander", "Charmeleon"]
         bulbasaur = ["Bulbasaur", "Ivysaur"]
         squirtle = ["Squirtle", "Wartortle"]
@@ -50,12 +59,15 @@ class Pokemon:
         self.level = level
         self.moves = moves
         self.experience = 510
-        if name in charmander:
-            self.health = round(7.5 * level, 0)
-        elif name in bulbasaur:
-            self.health = round(8.5 * level, 0)
-        elif name in squirtle:
-            self.health = round(8 * level, 0)
+        if health:
+            self.health = health
+        else:
+            if name in charmander:
+                self.health = round(7.5 * level, 0)
+            elif name in bulbasaur:
+                self.health = round(8.5 * level, 0)
+            elif name in squirtle:
+                self.health = round(8 * level, 0)
         self.max_health = self.health
 
     def add_new_moves(self):
@@ -116,7 +128,7 @@ class Pokemon:
         self.experience += exp_gained
         self.level_up()
 
-    def fight_wild_pokemon(self, opponent):
+    def initiate_battle(self, opponent, battle_type="wild"):
         escape = False
         move_powers = {"Tackle": 8,
                        "Dragon Breath": 10,
@@ -127,14 +139,13 @@ class Pokemon:
                        "Vine Whip": 8,
                        "Razor Leaf": 9,
                        "Solar Beam": 19}
-        print(f"A wild {opponent.name} appeared!")
-        time.sleep(0.5)
+
         print(f"You send out {self.name}!")
 
         # battle starts
         print("")
-        print("----- Wild Pokemon Encounter -----")
-        while self.health > 0 and opponent.health > 0 and not escape:
+        print("----- Pokemon Battle -----")
+        while self.health > 0 and opponent.health > 0:
             # pokemon information
             self.health = round(self.health, 2)
             opponent.health = round(opponent.health, 2)
@@ -191,7 +202,7 @@ class Pokemon:
                 damage = round(damage, 2)
                 opponent.health -= damage
                 print(f"You hit the opposing pokemon for {damage} damage!")
-                time.sleep(1)
+                time.sleep(0.5)
 
             # heal pokemon
             elif choice == "2":
@@ -205,8 +216,12 @@ class Pokemon:
 
             # run away
             elif choice == "3":
+                if battle_type != "wild":
+                    print("You can't flee from this battle.")
                 escape = flee_battle(self.level, opponent.level)
-                if not escape:
+                if escape and battle_type == "wild":
+                    break
+                if not escape and battle_type == "wild":
                     print("You failed to flee.")
 
             # check if opponent is dead
@@ -230,11 +245,9 @@ class Pokemon:
             elif advantage == "It's not very effective.":
                 print(advantage)
                 damage /= 2
-            time.sleep(0.5)
             damage = round(damage, 2)
             self.health -= damage
             print(f"It deals {damage} damage.")
-            time.sleep(1)
 
             # check if you are dead
             if self.health <= 0:
@@ -243,16 +256,18 @@ class Pokemon:
 
         if escape:
             print("You have successfully fled.")
+            time.sleep(0.5)
         self.health = self.max_health
         opponent.health = opponent.max_health
+        print("")
 
 
 def main():
     charmander = Pokemon("Charmander", "Fire", 5, ["Tackle", "Ember"])
     squirtle = Pokemon("Squirtle", "Water", 5, ["Tackle", "Water Gun"])
     bulbasaur = Pokemon("Bulbasaur", "Grass", 5, ["Tackle", "Vine Whip"])
-    charmander.fight_wild_pokemon(bulbasaur)
-    charmander.fight_wild_pokemon(bulbasaur)
+    charmander.initiate_battle(bulbasaur)
+    charmander.initiate_battle(bulbasaur)
     print(charmander.experience)
     print(charmander.level)
 
