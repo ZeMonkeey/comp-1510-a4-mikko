@@ -18,6 +18,10 @@ def make_board(rows: int, columns: int) -> dict:
     :precondition: params must be integers greater than 0
     :postcondition: make a board according to rows and columns given. Then, populates a 5x5 area with events.
     :return: a board as a dictionary
+    >>> make_board(5, 5)
+    {(0, 0): '|, ,|', (0, 1): '|, ,|', (0, 2): '|   |', (0, 3): '|   |', (0, 4): '|~ ~|', (1, 0): '|, ,|', (1, 1): '|, ,|', (1, 2): '|   |', (1, 3): '|   |', (1, 4): '|~ ~|', (2, 0): '|   |', (2, 1): '|   |', (2, 2): '| x |', (2, 3): '|   |', (2, 4): '|   |', (3, 0): '|   |', (3, 1): '|   |', (3, 2): '|   |', (3, 3): '|   |', (3, 4): '|   |', (4, 0): '|   |', (4, 1): '|   |', (4, 2): '|   |', (4, 3): '|   |', (4, 4): '|Gym|'}
+    >>> make_board(10, 10)
+    {(0, 0): '|, ,|', (0, 1): '|, ,|', (0, 2): '|   |', (0, 3): '|   |', (0, 4): '|~ ~|', (0, 5): '|   |', (0, 6): '|   |', (0, 7): '|   |', (0, 8): '|   |', (0, 9): '|   |', (1, 0): '|, ,|', (1, 1): '|, ,|', (1, 2): '|   |', (1, 3): '|   |', (1, 4): '|~ ~|', (1, 5): '|   |', (1, 6): '|   |', (1, 7): '|   |', (1, 8): '|   |', (1, 9): '|   |', (2, 0): '|   |', (2, 1): '|   |', (2, 2): '| x |', (2, 3): '|   |', (2, 4): '|   |', (2, 5): '|   |', (2, 6): '|   |', (2, 7): '|   |', (2, 8): '|   |', (2, 9): '|   |', (3, 0): '|   |', (3, 1): '|   |', (3, 2): '|   |', (3, 3): '|   |', (3, 4): '|   |', (3, 5): '|   |', (3, 6): '|   |', (3, 7): '|   |', (3, 8): '|   |', (3, 9): '|   |', (4, 0): '|   |', (4, 1): '|   |', (4, 2): '|   |', (4, 3): '|   |', (4, 4): '|Gym|', (4, 5): '|   |', (4, 6): '|   |', (4, 7): '|   |', (4, 8): '|   |', (4, 9): '|   |', (5, 0): '|   |', (5, 1): '|   |', (5, 2): '|   |', (5, 3): '|   |', (5, 4): '|   |', (5, 5): '|   |', (5, 6): '|   |', (5, 7): '|   |', (5, 8): '|   |', (5, 9): '|   |', (6, 0): '|   |', (6, 1): '|   |', (6, 2): '|   |', (6, 3): '|   |', (6, 4): '|   |', (6, 5): '|   |', (6, 6): '|   |', (6, 7): '|   |', (6, 8): '|   |', (6, 9): '|   |', (7, 0): '|   |', (7, 1): '|   |', (7, 2): '|   |', (7, 3): '|   |', (7, 4): '|   |', (7, 5): '|   |', (7, 6): '|   |', (7, 7): '|   |', (7, 8): '|   |', (7, 9): '|   |', (8, 0): '|   |', (8, 1): '|   |', (8, 2): '|   |', (8, 3): '|   |', (8, 4): '|   |', (8, 5): '|   |', (8, 6): '|   |', (8, 7): '|   |', (8, 8): '|   |', (8, 9): '|   |', (9, 0): '|   |', (9, 1): '|   |', (9, 2): '|   |', (9, 3): '|   |', (9, 4): '|   |', (9, 5): '|   |', (9, 6): '|   |', (9, 7): '|   |', (9, 8): '|   |', (9, 9): '|   |'}
     """
     board = {}
     for row in range(rows):
@@ -69,7 +73,7 @@ def welcome_user() -> str:
     """
     Print opening dialogue.
 
-    :return: name of user as a string
+    :return: name of user as a string.
     """
     print("Hi there new trainer. My name is Professor Oak.")
     time.sleep(1)
@@ -84,6 +88,12 @@ def make_starter(pokemon_choice: str) -> pokemon_class.Pokemon:
     :precondition: pokemon_choice must be either Charmander, Bulbasaur, or Squirtle.
     :postcondition: make a Pokemon object according to pokemon_choice given.
     :return: a Pokemon object
+
+    >>> charmander = make_starter("Charmander")
+    >>> charmander.name
+    'Charmander'
+    >>> charmander.level
+    5
     """
     if pokemon_choice == "Charmander":
         return pokemon_class.Pokemon(pokemon_choice, "Fire", 5, ["Tackle", "Ember"])
@@ -190,8 +200,14 @@ def validate_move(board: dict, direction: tuple) -> bool or str:
     :param board: a dictionary.
     :param direction: a tuple.
     :precondition: board must be made using the make_board function.
-    :postcondition: check if the direction given is within the board's boundary.
+    :postcondition: check if the direction given is within the board's boundary and within player's range.
     :return: True if direction is valid.
+
+    >>> test_board = make_board(5, 5)
+    >>> validate_move(test_board, (2, 1))
+    True
+    >>> validate_move(test_board, (2, 0))
+    False
     """
     if direction == (4, 4):
         return "gym"
@@ -216,6 +232,22 @@ def move_trainer(board: dict, direction: tuple) -> dict:
     :precondition: board must be made using the make_board function.
     :precondition: direction given must be within the board's boundary.
     :return: a board with the player's position modified. board is a dictionary.
+
+    >>> test_board = make_board(5, 5)
+    >>> display_board(test_board)
+    |, ,||, ,||   ||   ||   |
+    |, ,||, ,||   ||   ||   |
+    |   ||   || x ||   ||   |
+    |   ||   ||   ||   ||   |
+    |~ ~||~ ~||   ||   ||Gym|
+    >>> move_trainer(test_board, (2, 1))
+    {(0, 0): '|, ,|', (0, 1): '|, ,|', (0, 2): '|   |', (0, 3): '|   |', (0, 4): '|~ ~|', (1, 0): '|, ,|', (1, 1): '|, ,|', (1, 2): '|   |', (1, 3): '|   |', (1, 4): '|~ ~|', (2, 0): '|   |', (2, 1): '| x |', (2, 2): '|   |', (2, 3): '|   |', (2, 4): '|   |', (3, 0): '|   |', (3, 1): '|   |', (3, 2): '|   |', (3, 3): '|   |', (3, 4): '|   |', (4, 0): '|   |', (4, 1): '|   |', (4, 2): '|   |', (4, 3): '|   |', (4, 4): '|Gym|'}
+    >>> display_board(test_board)
+    |, ,||, ,||   ||   ||   |
+    |, ,||, ,|| x ||   ||   |
+    |   ||   ||   ||   ||   |
+    |   ||   ||   ||   ||   |
+    |~ ~||~ ~||   ||   ||Gym|
     """
     trainer_position = [coordinate for coordinate, value in board.items() if "x" in value][0]
     board[trainer_position] = board[trainer_position].replace("x", " ")
@@ -283,6 +315,16 @@ def check_for_events(board: dict) -> str:
     :precondition: board must be made using the make_board function.
     :postcondition: check the space that the user moved into.
     :return: a string of either "grass" or "water"
+
+    >>> test_board = {(0, 0): '|,x,|', (0, 1): '|, ,|', (0, 2): '|   |', (0, 3): '|   |', (0, 4): '|~ ~|', (1, 0): '|, ,|', (1, 1): '|, ,|', (1, 2): '|   |', (1, 3): '|   |', (1, 4): '|~ ~|', (2, 0): '|   |', (2, 1): '|   |', (2, 2): '|   |', (2, 3): '|   |', (2, 4): '|   |', (3, 0): '|   |', (3, 1): '|   |', (3, 2): '|   |', (3, 3): '|   |', (3, 4): '|   |', (4, 0): '|   |', (4, 1): '|   |', (4, 2): '|   |', (4, 3): '|   |', (4, 4): '|Gym|'}
+    >>> display_board(test_board)
+    |,x,||, ,||   ||   ||   |
+    |, ,||, ,||   ||   ||   |
+    |   ||   ||   ||   ||   |
+    |   ||   ||   ||   ||   |
+    |~ ~||~ ~||   ||   ||Gym|
+    >>> check_for_events(test_board)
+    'grass'
     """
     trainer_position = [coordinate for coordinate, value in board.items() if "x" in value][0]
     if "," in board[trainer_position]:
