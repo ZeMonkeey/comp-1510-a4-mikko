@@ -395,7 +395,7 @@ class Pokemon:
 
             damage = move_powers[opponent_attack] / 1.5
             advantage = check_advantage(opponent_attack, self.type)
-            print(f"\nThe wild {opponent.name} uses {opponent_attack}")
+            print(f"\nThe opposing {opponent.name} uses {opponent_attack}")
             time.sleep(0.5)
 
             # calculate damage
