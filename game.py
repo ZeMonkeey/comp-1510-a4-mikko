@@ -49,13 +49,13 @@ def display_board(board: dict):
     time.sleep(0.5)
 
 
-def welcome_user():
+def welcome_user() -> str:
     print("Hi there new trainer. My name is Professor Oak.")
     time.sleep(1)
     return input("What is your name?: ")
 
 
-def make_starter(pokemon_choice):
+def make_starter(pokemon_choice: str) -> pokemon_class.Pokemon:
     if pokemon_choice == "Charmander":
         return pokemon_class.Pokemon(pokemon_choice, "Fire", 5, ["Tackle", "Ember"])
     elif pokemon_choice == "Bulbasaur":
@@ -111,21 +111,20 @@ def make_trainer(name: str) -> dict:
     time.sleep(1)
     print("You may now start your journey on becoming the Pokemon champion!")
     time.sleep(1)
-    trainer_info = {"name": name, "pokemon": pokemon_choice,
-                    "potions": 5}
+    trainer_info = {"name": name, "pokemon": pokemon_choice, "potions": 5, "badges": []}
     return trainer_info
 
 
-def get_user_choice(board) -> tuple:
+def get_user_choice(board: dict) -> tuple or str:
     trainer_position = [coordinate for coordinate, value in board.items() if "x" in value][0]
-    directions = ("Up", "Down", "Left", "Right")
-    choices = ["1", "2", "3", "4"]
+    directions = ("Up", "Down", "Left", "Right", "quit")
+    choices = ["1", "2", "3", "4", "5"]
     choice = None
     print("\n")
     for sequence_number, direction in enumerate(directions, 1):
         print(f"{sequence_number}: {direction}")
     while choice not in choices:
-        choice = input("Enter a number to move (1-4): ")
+        choice = input("Enter a number to move (1-5): ")
     print("")
     if choice == "1":
         return trainer_position[0], trainer_position[1] - 1
@@ -135,6 +134,8 @@ def get_user_choice(board) -> tuple:
         return trainer_position[0] - 1, trainer_position[1]
     elif choice == "4":
         return trainer_position[0] + 1, trainer_position[1]
+    elif choice == "5":
+        return "quit"
 
 
 def validate_move(board: dict, direction: tuple) -> bool or str:
@@ -152,7 +153,7 @@ def validate_move(board: dict, direction: tuple) -> bool or str:
     return False
 
 
-def move_trainer(board, direction):
+def move_trainer(board: dict, direction: tuple) -> dict:
     trainer_position = [coordinate for coordinate, value in board.items() if "x" in value][0]
     board[trainer_position] = board[trainer_position].replace("x", " ")
     display_of_space = list(board[direction])
@@ -162,7 +163,7 @@ def move_trainer(board, direction):
     return board
 
 
-def fight_gym(trainer):
+def fight_gym(trainer: dict) -> bool:
     lose = None
     onix = pokemon_class.Pokemon("Onix", "Rock", 10, ["Tackle", "Rock Throw"], 90)
     steelix = pokemon_class.Pokemon("Steelix", "Steel", 10, ["Iron Tail", "Rock Throw", "Dragon Breath",
@@ -198,11 +199,12 @@ def fight_gym(trainer):
         print("You're good kid!")
         time.sleep(1)
         print("As proof of your victory, here's the Boulder Badge")
+        trainer["badges"].append("Boulder Badge")
         time.sleep(1)
         return True
 
 
-def check_for_events(board):
+def check_for_events(board: dict) -> str:
     trainer_position = [coordinate for coordinate, value in board.items() if "x" in value][0]
     if "," in board[trainer_position]:
         return "grass"
@@ -237,6 +239,23 @@ def get_water_pokemon(trainer: dict) -> object:
         return pokemons[random.randint(0, 2)]
 
 
+def check_if_goal_attained(trainer: dict):
+    if "Boulder Badge" in trainer["badges"]:
+        print("Congratulations! You have beat the game!")
+        print("୧(๑•̀ヮ•́)૭ LET'S GO!")
+
+
+def quit_game():
+    print("Are you sure you want to quit?")
+    time.sleep(0.5)
+    print("Your progress does not save.")
+    time.sleep(0.5)
+    confirm = input("y / n: ")
+    if confirm.lower() == "y":
+        print("Thanks for playing!")
+        quit()
+
+
 def game():  # called from main
     rows = 5
     columns = 5
@@ -248,6 +267,8 @@ def game():  # called from main
     display_board(board)
     while not beat_gym:
         direction = get_user_choice(board)
+        if direction == "quit":
+            quit_game()
         valid_move = validate_move(board, direction)
         if valid_move == "gym":
             beat_gym = fight_gym(trainer)
@@ -266,10 +287,10 @@ def game():  # called from main
                 time.sleep(0.5)
                 trainer["pokemon"].initiate_battle(wild_pokemon, trainer, "wild")
             display_board(board)
-            # achieved_goal = check_if_goal_attained(board, trainer)
         else:
             print("That's not a valid move! Please pick again")
             time.sleep(1)
+        check_if_goal_attained(trainer)
 
 
 def main():

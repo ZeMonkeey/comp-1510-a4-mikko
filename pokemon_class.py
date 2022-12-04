@@ -2,7 +2,7 @@ import random
 import time
 
 
-def check_advantage(move, opponent_type):
+def check_advantage(move: str, opponent_type: str) -> str or None:
     moves = {"Tackle": "Normal",
              "Dragon Breath": "Dragon",
              "Ember": "Fire",
@@ -41,7 +41,7 @@ def check_advantage(move, opponent_type):
         return "It's not very effective."
 
 
-def flee_battle(pokemon_level, opponent_level):
+def flee_battle(pokemon_level: int, opponent_level: int) -> bool:
     if pokemon_level > opponent_level:
         return random.choice((True, False, True, True, True))
     elif pokemon_level == opponent_level:
@@ -82,7 +82,7 @@ class Pokemon:
         print(f"{self.name} has learned {moves[self.name]}!\n")
         time.sleep(0.5)
 
-    def evolve_pokemon(self, evolutions):
+    def evolve_pokemon(self, evolutions: list):
         poke_arts = {"Charmeleon": """⬜⬜⬜⬜⬜⬜⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬛🟥⬛⬜⬜⬜⬜⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬛🟥🟥⬛⬜⬜⬛🟥🟥⬛⬜⬜⬜⬜⬜⬜⬜
@@ -263,7 +263,7 @@ class Pokemon:
             else:
                 self.experience = experience_points
                 break
-        if 10 >= self.level >= 7 and self.name not in evolutions[3:6]:
+        if 10 > self.level >= 7 and self.name not in evolutions[3:6]:
             self.evolve_pokemon(evolutions)
         if self.level >= 10 and self.name not in evolutions[6:9]:
             self.evolve_pokemon(evolutions)
@@ -278,8 +278,7 @@ class Pokemon:
         self.experience += exp_gained
         self.level_up()
 
-    def initiate_battle(self, opponent, trainer, battle_type="wild"):
-        lose = False
+    def initiate_battle(self, opponent, trainer: dict, battle_type="wild") -> True or None:
         escape = False
         move_powers = {"Tackle": 8,
                        "Dragon Breath": 10,
@@ -307,6 +306,7 @@ class Pokemon:
             time.sleep(0.5)
             print("")
             print("----------------------------------")
+            print("(You)")
             print(f"{self.name}    Lv.{self.level}\n    |HP {self.health} / {self.max_health}|")
             print("----------------------------------")
             print("")
