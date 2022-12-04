@@ -151,10 +151,11 @@ def check_for_events(board):
 
 
 def get_grass_pokemon(trainer: dict) -> object:
-    charmander = pokemon_class.Pokemon("Charmander", 39, "Fire", 5, ["Tackle", "Ember"])
-    bulbasaur = pokemon_class.Pokemon("Bulbasaur", 45, "Grass", 5, ["Tackle", "Vine Whip"])
-    charmeleon = pokemon_class.Pokemon("Charmeleon", 58, "Fire", 7, ["Tackle", "Ember", "Scratch"])
-    ivysaur = pokemon_class.Pokemon("Ivysaur", 60, "Grass", 7, ["Tackle", "Vine Whip", "Razor Leaf"])
+    level = random.randint(trainer["pokemon"].level - 3, trainer["pokemon"].level + 1)
+    charmander = pokemon_class.Pokemon("Charmander", "Fire", level, ["Tackle", "Ember"])
+    bulbasaur = pokemon_class.Pokemon("Bulbasaur", "Grass", level, ["Tackle", "Vine Whip"])
+    charmeleon = pokemon_class.Pokemon("Charmeleon", "Fire", level, ["Tackle", "Ember", "Scratch"])
+    ivysaur = pokemon_class.Pokemon("Ivysaur", "Grass", level, ["Tackle", "Vine Whip", "Razor Leaf"])
 
     if trainer["pokemon"].level < 7:
         pokemons = [charmander, bulbasaur]
@@ -165,8 +166,9 @@ def get_grass_pokemon(trainer: dict) -> object:
 
 
 def get_water_pokemon(trainer: dict) -> object:
-    squirtle = pokemon_class.Pokemon("Squirtle", 44, "Water", 5, ["Tackle", "Water Gun"])
-    wartortle = pokemon_class.Pokemon("Wartortle", 59, "Water", 7, ["Tackle", "Water Gun", "Bite"])
+    level = random.randint(trainer["pokemon"].level - 3, trainer["pokemon"].level + 1)
+    squirtle = pokemon_class.Pokemon("Squirtle", "Water", level, ["Tackle", "Water Gun"])
+    wartortle = pokemon_class.Pokemon("Wartortle", "Water", level, ["Tackle", "Water Gun", "Bite"])
 
     if trainer["pokemon"].level < 7:
         return squirtle
@@ -180,22 +182,6 @@ def initiate_battle(trainer: dict, opponent: object):
 
 
 def game():  # called from main
-    moves = {"Tackle": 5,
-             "Scratch": 5,
-             "Ember": 5,
-             "Flamethrower": 12,
-             "Water Gun": 5,
-             "Bite": 7,
-             "Vine Whip": 5,
-             "Razor Leaf": 6,
-             "Solar Beam": 14}
-    pokemons = {"Charmander": {"HP": 39, "level": 5, "moves": {"Tackle": 5, "Ember": 5}},
-                "Squirtle": {"HP": 44, "level": 5, "moves": {"Tackle": 5, "Water Gun": 5}},
-                "Bulbasaur": {"HP": 45, "level": 5, "moves": {"Tackle": 5, "Vine Whip": 5}},
-                "Charmeleon": {"HP": 58, "level": 7, "moves": {"Tackle": 5, "Ember": 5, "Scratch": 5}},
-                "Wartortle": {"HP": 59, "level": 7, "moves": {"Tackle": 5, "Water Gun": 5, "Bite": 7}},
-                "Ivysaur": {"HP": 60, "level": 7, "moves": {"Tackle": 5, "Vine Whip": 5, "Razor Leaf": 6}},
-                }
     rows = 5
     columns = 5
     board = make_board(rows, columns)

@@ -41,12 +41,48 @@ def flee_battle(pokemon_level, opponent_level):
 
 
 class Pokemon:
-    def __init__(self, name: str, health: int, element_type: str, level: int, moves: list):
+    def __init__(self, name: str, element_type: str, level: int, moves: list):
+        charmander = ["Charmander", "Charmeleon"]
+        bulbasaur = ["Bulbasaur", "Ivysaur"]
+        squirtle = ["Squirtle", "Wartortle"]
         self.name = name
-        self.health = health
         self.type = element_type
         self.level = level
         self.moves = moves
+        self.experience = 0
+        if name in charmander:
+            self.health = round(7.5 * level, 0)
+        elif name in bulbasaur:
+            self.health = round(8.5 * level, 0)
+        elif name in squirtle:
+            self.health = round(8 * level, 0)
+
+    def evolve_pokemon(self):
+        evolutions = ["Charmander", "Squirtle", "Bulbasaur",
+                      "Charmeleon", "Wartortle", "Ivysaur",
+                      "Charizard", "Blastoise", "Venasaur"]
+
+        while self.level >= 7 and self.name not in evolutions[6:9]:
+            index = evolutions.index(self.name)
+            pre_evolution = self.name
+            self.name = evolutions[index + 3]
+            print(f"{pre_evolution} has evolved into {self.name}!")
+
+    def level_up(self):
+        experience_points = self.experience
+        while experience_points > 0:
+            self.experience -= 100
+            if self.experience >= 0:
+                self.level += 1
+                self.health += 10
+                experience_points -= 100
+            else:
+                self.experience = experience_points
+                break
+        self.evolve_pokemon()
+
+    def gain_exp(self, opponent):
+        level_difference = self.level - opponent.level
 
     def fight_wild_pokemon(self, opponent):
         escape = False
@@ -164,8 +200,14 @@ class Pokemon:
 
 
 def main():
-    charmander = Pokemon("Charmander", 39, "Fire", 5, ["Tackle", "Ember"])
-    charmander.fight_wild_pokemon(charmander)
+    charmander = Pokemon("Charmander", "Fire", 5, ["Tackle", "Ember"])
+    squirtle = Pokemon("Squirtle", "Water", 5, ["Tackle", "Water Gun"])
+    bulbasaur = Pokemon("Bulbasaur", "Grass", 5, ["Tackle", "Vine Whip"])
+    print(charmander.health)
+    print(bulbasaur.health)
+    print(squirtle.health)
+    charmander.level_up()
+    # charmander.fight_wild_pokemon(charmander)
 
 
 if __name__ == '__main__':
