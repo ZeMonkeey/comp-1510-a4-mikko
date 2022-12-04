@@ -59,7 +59,7 @@ class Pokemon:
         self.type = element_type
         self.level = level
         self.moves = moves
-        self.experience = 510
+        self.experience = 0
         if health:
             self.health = health
         else:
@@ -129,7 +129,7 @@ class Pokemon:
         self.experience += exp_gained
         self.level_up()
 
-    def initiate_battle(self, opponent, battle_type="wild"):
+    def initiate_battle(self, opponent, trainer, battle_type="wild"):
         lose = False
         escape = False
         move_powers = {"Tackle": 8,
@@ -214,7 +214,10 @@ class Pokemon:
             elif choice == "2":
                 if self.health < self.max_health:
                     self.health += 10
-                    print(f"You healed {self.name}.\n")
+                    trainer["potions"] -= 1
+                    print(f"You healed {self.name} for 10 hp.")
+                    time.sleep(0.5)
+                    print(f"You have {trainer['potions']} left.\n")
                     if self.health > self.max_health:
                         self.health = self.max_health
                 elif self.health == self.max_health:
@@ -266,7 +269,9 @@ class Pokemon:
             print("You have successfully fled.")
             time.sleep(0.5)
 
-        self.health = self.max_health
+        # reset health
+        if battle_type == "wild":
+            self.health = self.max_health
         opponent.health = opponent.max_health
         print("")
 

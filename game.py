@@ -161,10 +161,11 @@ def fight_gym(trainer):
         time.sleep(1)
         print(f"Go Onix!\n")
         time.sleep(1)
-        lose = trainer["pokemon"].initiate_battle(onix, "Brock")
+        lose = trainer["pokemon"].initiate_battle(onix, trainer, "Brock")
         if not lose:
             print("Go Steelix!")
-            trainer["pokemon"].initiate_battle(steelix, "Brock")
+            trainer["pokemon"].initiate_battle(steelix, trainer, "Brock")
+            trainer["pokemon"].health = trainer["pokemon"].max_health
         if lose:
             print("Get gud kid!")
             return False
@@ -235,12 +236,12 @@ def game():  # called from main
                 wild_pokemon = get_grass_pokemon(trainer)
                 print(f"A wild {wild_pokemon.name} appeared!")
                 time.sleep(0.5)
-                trainer["pokemon"].initiate_battle(wild_pokemon, "wild")
+                trainer["pokemon"].initiate_battle(wild_pokemon, trainer, "wild")
             elif event_type == "water":
                 wild_pokemon = get_water_pokemon(trainer)
                 print(f"A wild {wild_pokemon.name} appeared!")
                 time.sleep(0.5)
-                trainer["pokemon"].initiate_battle(wild_pokemon, "wild")
+                trainer["pokemon"].initiate_battle(wild_pokemon, trainer, "wild")
             display_board(board)
             # achieved_goal = check_if_goal_attained(board, trainer)
         else:
