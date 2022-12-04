@@ -241,6 +241,7 @@ def get_water_pokemon(trainer: dict) -> object:
 
 def check_if_goal_attained(trainer: dict):
     if "Boulder Badge" in trainer["badges"]:
+        print("")
         print("Congratulations! You have beat the game!")
         print("୧(๑•̀ヮ•́)૭ LET'S GO!")
 

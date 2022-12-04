@@ -380,6 +380,8 @@ class Pokemon:
                     print("You can't flee from this battle.")
                 escape = flee_battle(self.level, opponent.level)
                 if escape and battle_type == "wild":
+                    print("You have successfully fled.")
+                    time.sleep(0.5)
                     break
                 if not escape and battle_type == "wild":
                     print("You failed to flee.")
@@ -413,10 +415,6 @@ class Pokemon:
             if self.health <= 0:
                 print(f"\n{self.name} has fainted!")
                 return True
-
-        if escape:
-            print("You have successfully fled.")
-            time.sleep(0.5)
 
         # reset health
         if battle_type == "wild":
