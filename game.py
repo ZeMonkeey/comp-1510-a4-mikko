@@ -27,6 +27,7 @@ def make_board(rows: int, columns: int) -> dict:
 
 
 def display_board(board: dict):
+    print("")
     for coordinate, value in board.items():
         if coordinate[1] == 0:
             print(value, end="")
@@ -47,6 +48,7 @@ def display_board(board: dict):
         if coordinate[1] == 4:
             print(value, end="")
     print("")
+    time.sleep(0.5)
 
 
 def welcome_user():
@@ -57,11 +59,11 @@ def welcome_user():
 
 def make_starter(pokemon_choice):
     if pokemon_choice == "Charmander":
-        return pokemon_class.Pokemon(pokemon_choice, 39, "Fire", 5, ["Tackle", "Ember"])
+        return pokemon_class.Pokemon(pokemon_choice, "Fire", 5, ["Tackle", "Ember"])
     elif pokemon_choice == "Bulbasaur":
-        return pokemon_class.Pokemon(pokemon_choice, 45, "Grass", 5, ["Tackle", "Vine Whip"])
+        return pokemon_class.Pokemon(pokemon_choice, "Grass", 5, ["Tackle", "Vine Whip"])
     elif pokemon_choice == "Squirtle":
-        return pokemon_class.Pokemon(pokemon_choice, 44, "Water", 5, ["Tackle", "Water Gun"])
+        return pokemon_class.Pokemon(pokemon_choice, "Water", 5, ["Tackle", "Water Gun"])
 
 
 def make_trainer(name: str) -> dict:
@@ -188,10 +190,9 @@ def game():  # called from main
     # name = welcome_user()
     trainer = make_trainer("Mikko")
     beat_gym = False
-    # Tell the user where they are
-    display_board(board)
-    time.sleep(1)
     while not beat_gym:
+        # Tell the user where they are
+        display_board(board)
         direction = get_user_choice(board)
         valid_move = validate_move(board, direction)
         if valid_move == "gym":
