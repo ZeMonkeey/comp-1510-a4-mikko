@@ -27,7 +27,6 @@ def make_board(rows: int, columns: int) -> dict:
 
 
 def display_board(board: dict):
-    print("")
     for coordinate, value in board.items():
         if coordinate[1] == 0:
             print(value, end="")
@@ -47,7 +46,6 @@ def display_board(board: dict):
     for coordinate, value in board.items():
         if coordinate[1] == 4:
             print(value, end="")
-    print("")
     time.sleep(0.5)
 
 
@@ -100,11 +98,12 @@ def get_user_choice(board) -> tuple:
     directions = ("Up", "Down", "Left", "Right")
     choices = ["1", "2", "3", "4"]
     choice = None
-    print("")
+    print("\n")
     for sequence_number, direction in enumerate(directions, 1):
         print(f"{sequence_number}: {direction}")
     while choice not in choices:
         choice = input("Enter a number to move (1-4): ")
+    print("")
     if choice == "1":
         return trainer_position[0], trainer_position[1] - 1
     elif choice == "2":
@@ -141,7 +140,24 @@ def move_trainer(board, direction):
 
 
 def fight_gym(trainer):
-    pass
+    onix = pokemon_class.Pokemon("Charmander", "Rock", 10, ["Tackle", "Rock Throw"], 90)
+    steelix = pokemon_class.Pokemon("Charmander", "Steel", 10, ["Iron Tail", "Rock Throw", "Dragon Breath",
+                                                                "Earthquake"], 110)
+
+    print("There is a Gym!")
+    time.sleep(0.5)
+    print("It is owned by the Rock-Type Gym Leader, Brock.")
+    time.sleep(0.5)
+    print("Would you like to challenge the Gym Leader?")
+    confirm = input("y / n: ")
+    if confirm.lower() == "y":
+        print("So you challenge me to a Pokemon battle.")
+        time.sleep(0.5)
+        print("My name's Brock and I'm a Gym Leader.")
+        time.sleep(0.5)
+        print("When it comes to rock-hard willpower, nobody can beat me!")
+        trainer["pokemon"].initiate_battle(onix, "Brock")
+        trainer["pokemon"].initiate_battle(steelix, "Brock")
 
 
 def check_for_events(board):
@@ -179,10 +195,6 @@ def get_water_pokemon(trainer: dict) -> object:
         return pokemons[random.randint(0, 2)]
 
 
-def initiate_battle(trainer: dict, opponent: object):
-    trainer["pokemon"].fight_wild_pokemon(opponent)
-
-
 def game():  # called from main
     rows = 5
     columns = 5
@@ -190,25 +202,28 @@ def game():  # called from main
     # name = welcome_user()
     trainer = make_trainer("Mikko")
     beat_gym = False
+    # Tell the user where they are
+    display_board(board)
     while not beat_gym:
-        # Tell the user where they are
-        display_board(board)
         direction = get_user_choice(board)
         valid_move = validate_move(board, direction)
         if valid_move == "gym":
             fight_gym(trainer)
+            display_board(board)
         elif valid_move:
             move_trainer(board, direction)
-            display_board(board)
             event_type = check_for_events(board)
             if event_type == "grass":
                 wild_pokemon = get_grass_pokemon(trainer)
-                initiate_battle(trainer, wild_pokemon)
+                print(f"A wild {wild_pokemon.name} appeared!")
+                time.sleep(0.5)
+                trainer["pokemon"].initiate_battle(wild_pokemon, "wild")
             elif event_type == "water":
                 wild_pokemon = get_water_pokemon(trainer)
-                initiate_battle(trainer, wild_pokemon)
-                # if trainer_has_leveled():
-                #     execute_glow_up_protocol()
+                print(f"A wild {wild_pokemon.name} appeared!")
+                time.sleep(0.5)
+                trainer["pokemon"].initiate_battle(wild_pokemon, "wild")
+            display_board(board)
             # achieved_goal = check_if_goal_attained(board, trainer)
         else:
             print("That's not a valid move! Please pick again")
