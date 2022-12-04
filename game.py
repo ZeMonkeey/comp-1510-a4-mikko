@@ -328,9 +328,9 @@ def check_for_events(board: dict) -> str:
     """
     trainer_position = [coordinate for coordinate, value in board.items() if "x" in value][0]
     if "," in board[trainer_position]:
-        return "grass"
+        return random.choice((None, None, "grass", "grass", "grass"))
     elif "~" in board[trainer_position]:
-        return "water"
+        return random.choice((None, None, "water", "water", "water"))
 
 
 def get_grass_pokemon(trainer: dict) -> object:
