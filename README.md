@@ -14,4 +14,4 @@ A01331396
 ZeMonkeey
 
 ## Any important comments you'd like to make about your work:
-Replace this line with any comments you want to share
+Most ascii art may not work on terminal/command prompt.
