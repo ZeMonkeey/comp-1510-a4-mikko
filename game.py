@@ -140,9 +140,10 @@ def move_trainer(board, direction):
 
 
 def fight_gym(trainer):
-    onix = pokemon_class.Pokemon("Charmander", "Rock", 10, ["Tackle", "Rock Throw"], 90)
-    steelix = pokemon_class.Pokemon("Charmander", "Steel", 10, ["Iron Tail", "Rock Throw", "Dragon Breath",
-                                                                "Earthquake"], 110)
+    lose = None
+    onix = pokemon_class.Pokemon("Onix", "Rock", 10, ["Tackle", "Rock Throw"], 90)
+    steelix = pokemon_class.Pokemon("Steelix", "Steel", 10, ["Iron Tail", "Rock Throw", "Dragon Breath",
+                                                             "Earthquake"], 110)
 
     print("There is a Gym!")
     time.sleep(0.5)
@@ -150,14 +151,31 @@ def fight_gym(trainer):
     time.sleep(0.5)
     print("Would you like to challenge the Gym Leader?")
     confirm = input("y / n: ")
+    time.sleep(0.5)
     if confirm.lower() == "y":
         print("So you challenge me to a Pokemon battle.")
-        time.sleep(0.5)
+        time.sleep(1)
         print("My name's Brock and I'm a Gym Leader.")
-        time.sleep(0.5)
+        time.sleep(1)
         print("When it comes to rock-hard willpower, nobody can beat me!")
-        trainer["pokemon"].initiate_battle(onix, "Brock")
-        trainer["pokemon"].initiate_battle(steelix, "Brock")
+        time.sleep(1)
+        print(f"Go Onix!\n")
+        time.sleep(1)
+        lose = trainer["pokemon"].initiate_battle(onix, "Brock")
+        if not lose:
+            print("Go Steelix!")
+            trainer["pokemon"].initiate_battle(steelix, "Brock")
+        if lose:
+            print("Get gud kid!")
+            return False
+    if not lose:
+        print("ARGH! I lost!")
+        time.sleep(1)
+        print("You're good kid!")
+        time.sleep(1)
+        print("As proof of your victory, here's the Boulder Badge")
+        time.sleep(1)
+        return True
 
 
 def check_for_events(board):
@@ -208,7 +226,7 @@ def game():  # called from main
         direction = get_user_choice(board)
         valid_move = validate_move(board, direction)
         if valid_move == "gym":
-            fight_gym(trainer)
+            beat_gym = fight_gym(trainer)
             display_board(board)
         elif valid_move:
             move_trainer(board, direction)

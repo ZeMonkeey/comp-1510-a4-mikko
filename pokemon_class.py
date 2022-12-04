@@ -8,6 +8,7 @@ def check_advantage(move, opponent_type):
              "Ember": "Fire",
              "Flamethrower": "Fire",
              "Water Gun": "Water",
+             "Hydro Pump": "Water",
              "Bite": "Dark",
              "Vine Whip": "Grass",
              "Razor Leaf": "Grass",
@@ -129,6 +130,7 @@ class Pokemon:
         self.level_up()
 
     def initiate_battle(self, opponent, battle_type="wild"):
+        lose = False
         escape = False
         move_powers = {"Tackle": 8,
                        "Dragon Breath": 10,
@@ -136,9 +138,13 @@ class Pokemon:
                        "Flamethrower": 16,
                        "Water Gun": 8,
                        "Bite": 10,
+                       "Hydro Pump": 18,
                        "Vine Whip": 8,
                        "Razor Leaf": 9,
-                       "Solar Beam": 19}
+                       "Solar Beam": 19,
+                       "Iron Tail": 17,
+                       "Rock Throw": 9,
+                       "Earthquake": 17.5}
 
         print(f"You send out {self.name}!")
 
@@ -251,12 +257,15 @@ class Pokemon:
 
             # check if you are dead
             if self.health <= 0:
-                print(f"{self.name} has fainted!")
-                break
+                print(f"\n{self.name} has fainted!")
+                lose = True
+                time.sleep(0.5)
+                return lose
 
         if escape:
             print("You have successfully fled.")
             time.sleep(0.5)
+
         self.health = self.max_health
         opponent.health = opponent.max_health
         print("")
